@@ -113,19 +113,3 @@ class GridMap:
                     row_cells.append(".")
 
             print(" ".join(row_cells))
-
-    
-
-
-if __name__ == "__main__":
-    warehouse = GridMap(
-        width=8,
-        height=6,
-        start=(0, 0),
-        goal=(5, 7),
-        obstacles={(1, 2), (1, 3), (2, 3), (4, 1), (4, 2)}
-    )
-
-    warehouse.print_grid()
-
-    print("Neighbors of start:", warehouse.get_neighbors((0, 0)))
