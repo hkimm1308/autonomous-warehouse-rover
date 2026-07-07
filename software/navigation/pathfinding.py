@@ -1,42 +1,69 @@
-# python software/navigation/pathfinding.py
+import heapq
+
 
 class AStarPlanner:
-    """
-    Finds the shortest path through a GridMap using the A* search algorithm.
-    """
-
     def __init__(self, grid_map):
-        """
-        Store the grid map that the planner will search.
-        """
         self.grid_map = grid_map
 
-    def heuristic(self, position, goal):
+    def heuristic(self, current, goal):
         """
-        Estimate the distance from the current position to the goal.
-
-        This uses Manhattan distance because the rover can currently move
-        only up, down, left, and right.
+        Manhattan distance heuristic for 4-direction grid movement.
         """
-        current_row, current_col = position
+        current_row, current_col = current
         goal_row, goal_col = goal
 
-        row_distance = abs(current_row - goal_row)
-        col_distance = abs(current_col - goal_col)
+        return abs(current_row - goal_row) + abs(current_col - goal_col)
 
-        return row_distance + col_distance
+    def reconstruct_path(self, came_from, current):
+        """
+        Rebuilds the final path by walking backward from goal to start.
+        """
+        path = [current]
 
+        while current in came_from:
+            current = came_from[current]
+            path.append(current)
 
-if __name__ == "__main__":
-    from software.navigation.grid_map import GridMap
+        path.reverse()
+        return path
 
-    warehouse = GridMap(
-        width=8,
-        height=6,
-        start=(0, 0),
-        goal=(5, 7),
-    )
+    def find_path(self, start, goal):
+        """
+        Runs A* search from start to goal.
 
-    planner = AStarPlanner(warehouse)
+        Returns:
+            list of (row, col) coordinates if a path exists
+            None if no path exists
+        """
+        open_set = []
+        heapq.heappush(open_set, (0, start))
 
-    print("Heuristic from start to goal:", planner.heuristic(warehouse.start, warehouse.goal))
+        came_from = {}
+
+        g_score = {}
+        g_score[start] = 0
+
+        visited = set()
+
+        while open_set:
+            current_priority, current = heapq.heappop(open_set)
+
+            if current == goal:
+                return self.reconstruct_path(came_from, current)
+
+            if current in visited:
+                continue
+
+            visited.add(current)
+
+            for neighbor in self.grid_map.get_neighbors(current):
+                tentative_g_score = g_score[current] + 1
+
+                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g_score
+
+                    f_score = tentative_g_score + self.heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f_score, neighbor))
+
+        return None
