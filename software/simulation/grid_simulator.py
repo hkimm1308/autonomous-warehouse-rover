@@ -27,6 +27,25 @@ def print_grid_with_path(grid, path):
         print(" ".join(row_items))
 
 
+def run_planner(grid, planner, start, goal, label):
+    path = planner.find_path(start, goal)
+
+    print(label)
+
+    if path:
+        print_grid_with_path(grid, path)
+        print()
+        print("Path:", path)
+        print("Path length:", len(path))
+    else:
+        print_grid_with_path(grid, [])
+        print()
+        print("No path found.")
+
+    print("-" * 50)
+    return path
+
+
 def main():
     warehouse = GridMap(rows=6, cols=8)
 
@@ -45,19 +64,29 @@ def main():
     ])
 
     planner = AStarPlanner(warehouse)
-    path = planner.find_path(start, goal)
 
-    print("Warehouse path:")
+    original_path = run_planner(
+        warehouse,
+        planner,
+        start,
+        goal,
+        "Original warehouse path:"
+    )
 
-    if path:
-        print_grid_with_path(warehouse, path)
+    if original_path:
+        new_obstacle = (0, 4)
+        warehouse.add_obstacle(new_obstacle)
+
+        print(f"New obstacle added at {new_obstacle}")
         print()
-        print("Path:", path)
-        print("Path length:", len(path))
-    else:
-        print_grid_with_path(warehouse, [])
-        print()
-        print("No path found.")
+
+        rerouted_path = run_planner(
+            warehouse,
+            planner,
+            start,
+            goal,
+            "Rerouted warehouse path:"
+        )
 
 
 if __name__ == "__main__":
