@@ -42,8 +42,16 @@ def run_planner(grid, planner, start, goal, label):
         print()
         print("No path found.")
 
-    print("-" * 50)
+    print("-" * 60)
     return path
+
+
+def add_obstacle_and_reroute(grid, planner, start, goal, obstacle, label):
+    print(f"New obstacle detected at {obstacle}")
+    grid.add_obstacle(obstacle)
+    print()
+
+    return run_planner(grid, planner, start, goal, label)
 
 
 def main():
@@ -70,23 +78,44 @@ def main():
         planner,
         start,
         goal,
-        "Original warehouse path:"
+        "Scenario 1: Original warehouse route"
     )
 
     if original_path:
-        new_obstacle = (0, 4)
-        warehouse.add_obstacle(new_obstacle)
-
-        print(f"New obstacle added at {new_obstacle}")
-        print()
-
-        rerouted_path = run_planner(
+        first_reroute = add_obstacle_and_reroute(
             warehouse,
             planner,
             start,
             goal,
-            "Rerouted warehouse path:"
+            obstacle=(0, 4),
+            label="Scenario 2: Reroute after blocked aisle"
         )
+
+    if first_reroute:
+        second_reroute = add_obstacle_and_reroute(
+            warehouse,
+            planner,
+            start,
+            goal,
+            obstacle=(3, 4),
+            label="Scenario 3: Reroute after second obstacle"
+        )
+
+    print("Scenario 4: Blocking part of the lower route")
+    warehouse.add_obstacles([
+        (3, 5),
+        (3, 6),
+        (3, 7),
+        (4, 7),
+    ])
+
+    final_path = run_planner(
+        warehouse,
+        planner,
+        start,
+        goal,
+        "Final route check after multiple blocked aisles"
+    )
 
 
 if __name__ == "__main__":
