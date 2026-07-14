@@ -42,3 +42,263 @@ Run the multi-scenario warehouse rerouting demo:
 
 ```bash
 python -m software.simulation.grid_simulator
+```
+
+Run the step-by-step robot movement demo:
+
+```bash
+python -m software.simulation.robot_movement_simulator
+```
+
+Run the dynamic robot replanning demo:
+
+```bash
+python -m software.simulation.dynamic_robot_simulator
+```
+
+Run the test suite:
+
+```bash
+python -m pytest
+```
+
+Current test status:
+
+```text
+14 passed
+```
+
+---
+
+## System Architecture
+
+Current software architecture:
+
+```text
+GridMap
+   │
+   ▼
+AStarPlanner
+   │
+   ▼
+Robot
+   │
+   ▼
+Simulation
+   │
+   ▼
+Future Hardware Integration
+```
+
+Planned full-system architecture:
+
+```text
+                    Camera
+                      │
+                      ▼
+             Raspberry Pi 4
+                      │
+         Computer Vision (OpenCV)
+                      │
+          Navigation & Path Planning
+                 (A* Algorithm)
+                      │
+          Serial Communication
+                      │
+                     ESP32
+                      │
+               PID Motor Control
+                      │
+                Motor Driver
+                      │
+                  DC Motors
+```
+
+---
+
+## Tech Stack
+
+### Current Software
+
+- Python
+- Pytest
+- A* Pathfinding
+- Grid-Based Navigation
+- Dynamic Rerouting
+- Robot Movement Simulation
+
+### Planned Software
+
+- OpenCV
+- NumPy
+- PySerial
+- Telemetry dashboard
+
+### Planned Embedded Systems
+
+- ESP32
+- Raspberry Pi 4
+- UART Serial Communication
+- PID Motor Control
+
+### Planned Hardware
+
+- Raspberry Pi 4
+- ESP32
+- DC Gear Motors
+- Motor Driver
+- Ultrasonic Sensors
+- Camera Module
+- 3D Printed Chassis
+
+---
+
+## Repository Structure
+
+```text
+autonomous-warehouse-rover/
+
+├── assets/              # Images, diagrams, logos
+├── data/                # Telemetry and testing data
+├── docs/                # Documentation
+├── environment/         # Warehouse layouts and obstacle designs
+├── firmware/            # ESP32 firmware
+├── hardware/            # CAD, wiring, assembly documentation
+├── media/               # Photos, videos, GIFs
+├── scripts/             # Utility scripts
+├── software/            # Python source code
+│   ├── navigation/      # GridMap and A* path planning
+│   ├── robot/           # Robot movement logic
+│   └── simulation/      # Warehouse and robot simulators
+└── tests/               # Unit tests
+```
+
+---
+
+## Development Roadmap
+
+### Phase 1 — Planning & Architecture
+
+- [x] Repository setup
+- [x] Documentation structure
+- [x] Git feature-branch workflow
+- [x] Initial software architecture
+- [ ] Hardware selection
+
+### Phase 2 — Navigation Simulation
+
+- [x] GridMap environment
+- [x] Static obstacle handling
+- [x] A* pathfinding
+- [x] Path visualization
+- [x] Dynamic obstacle rerouting
+- [x] Step-by-step robot movement
+- [x] Mid-route replanning
+- [x] Unit tests
+
+### Phase 3 — Mobility
+
+- [ ] Build chassis
+- [ ] Motor integration
+- [ ] Manual driving
+- [ ] PID control
+
+### Phase 4 — Perception
+
+- [ ] Camera integration
+- [ ] Obstacle detection
+- [ ] Sensor fusion
+
+### Phase 5 — Hardware Integration
+
+- [ ] Raspberry Pi setup
+- [ ] ESP32 firmware
+- [ ] Serial communication
+- [ ] Motor command pipeline
+
+### Phase 6 — Final Demonstration
+
+- [ ] Full autonomous warehouse run
+- [ ] Demo video
+- [ ] Final documentation
+- [ ] Portfolio write-up
+
+---
+
+## Team
+
+### Hudson Kimm
+
+**Software Engineering**
+
+- Navigation algorithms
+- Path planning
+- Robot movement simulation
+- Dynamic rerouting
+- Computer vision
+- Embedded software
+- Telemetry dashboard
+- Documentation
+
+### Matt Blong
+
+**Mechanical & Electrical Engineering**
+
+- Chassis design
+- CAD
+- Wiring
+- Electronics
+- Sensor integration
+- Environment construction
+
+---
+
+## Current Progress
+
+The project currently has a working Python-based navigation simulation. The robot can calculate a path through a warehouse grid, move step-by-step, detect when a new obstacle blocks its current route, replan from its current position, and continue to the goal.
+
+Current validation:
+
+```text
+14 passing tests
+```
+
+Current active branch:
+
+```text
+hudson/navigation
+```
+
+---
+
+## Future Improvements
+
+Potential extensions include:
+
+- SLAM-based navigation
+- AprilTag or ArUco marker localization
+- Robotic arm for package pickup
+- Autonomous charging dock
+- Multi-robot coordination
+- ROS2 integration
+- LiDAR mapping
+- Reinforcement learning for navigation
+- Real-time telemetry dashboard
+
+---
+
+## Gallery
+
+Progress photos, architecture diagrams, and demonstration videos will be added throughout development.
+
+---
+
+## License
+
+This project is released under the MIT License.
+
+---
+
+**Summer 2026**
+
+Designed and developed collaboratively by Hudson Kimm and Matt Blong.
